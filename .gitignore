@@ -1,0 +1,14 @@
+# Dependency & build directories
+node_modules/
+.DS_Store
+*.log
+.env
+.env.local
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+
+# Temporary scratch files
+scratch/
