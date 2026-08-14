@@ -589,7 +589,7 @@
     .modal-foot{ padding: 12px 16px; }
   }
 
-  /* ---------- GEMINI API INTEGRATION & CHATBOT STYLES ---------- */
+  /* ---------- GOALFORGE AI INTEGRATION & CHATBOT STYLES ---------- */
   .api-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11.5px;color:var(--green);background:rgba(177,140,255,0.1);border:1px solid rgba(177,140,255,0.3);padding:6px 12px;border-radius:20px;cursor:pointer;transition:all .2s ease;}
   .api-badge:hover{border-color:var(--green);box-shadow:0 0 10px rgba(177,140,255,0.25);}
   .api-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulseDot 2s infinite;}
@@ -640,7 +640,7 @@
     <a class="switch-goal">switch goal</a>
     <a class="logout-link">log out</a>
   </div>
-  <div class="api-badge" id="apiBadge" title="Gemini 2.5 Flash API Connected — Click to configure"><span class="api-dot"></span><span id="apiBadgeLabel">Gemini 2.5 AI</span></div>
+  <div class="api-badge" id="apiBadge" title="GoalForge AI Connected — Click to configure"><span class="api-dot"></span><span id="apiBadgeLabel">GoalForge AI</span></div>
   <div class="theme-toggle" id="themeToggle"><span id="themeIcon">◐</span> <span id="themeLabel">dark</span></div>
 </nav>
 <script>
@@ -656,21 +656,21 @@
     }
   })();
 
-/* ===================== GEMINI 2.5 FLASH API INTEGRATION ===================== */
-const GEMINI_DEFAULT_KEY = typeof atob !== 'undefined' ? atob('QVEuQWI4Uk42S1BpV1VzQVBlVkhnZWJ3VHFmMjBzbENfRVd1R2ZmNl9pZHBmT3B1WnA5LVE=') : '';
+/* ===================== GOALFORGE AI ENGINE INTEGRATION ===================== */
+const AI_ENGINE_DEFAULT_KEY = typeof atob !== 'undefined' ? atob('QVEuQWI4Uk42S1BpV1VzQVBlVkhnZWJ3VHFmMjBzbENfRVd1R2ZmNl9pZHBmT3B1WnA5LVE=') : '';
 
-function getGeminiKey() {
-  return localStorage.getItem('gemini_api_key') || GEMINI_DEFAULT_KEY;
+function getAIKey() {
+  return localStorage.getItem('goalforge_api_key') || AI_ENGINE_DEFAULT_KEY;
 }
 
-function setGeminiKey(key) {
-  if (!key) localStorage.removeItem('gemini_api_key');
-  else localStorage.setItem('gemini_api_key', key.trim());
+function setAIKey(key) {
+  if (!key) localStorage.removeItem('goalforge_api_key');
+  else localStorage.setItem('goalforge_api_key', key.trim());
 }
 
-async function callGeminiAPI(prompt, expectJson = true) {
-  const apiKey = getGeminiKey();
-  const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + apiKey;
+async function callAIEngineAPI(prompt, expectJson = true) {
+  const apiKey = getAIKey();
+  const url = 'https://generativelanguage.googleapis.com/v1beta/models/active-ai-model:generateContent?key=' + apiKey;
   
   const reqBody = {
     contents: [{ parts: [{ text: prompt }] }]
@@ -692,7 +692,7 @@ async function callGeminiAPI(prompt, expectJson = true) {
   
   const data = await response.json();
   const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!rawText) throw new Error('No content returned from Gemini API');
+  if (!rawText) throw new Error('No content returned from GoalForge AI API');
   
   if (expectJson) {
     return JSON.parse(rawText);
@@ -700,8 +700,8 @@ async function callGeminiAPI(prompt, expectJson = true) {
   return rawText;
 }
 
-// 1. AI Resume Scan via Gemini 2.5 Flash
-async function callGeminiScan(resumeText, jobLabel, jdText) {
+// 1. AI Resume Scan via GoalForge AI
+async function callAIScan(resumeText, jobLabel, jdText) {
   const prompt = 'You are GoalForge AI, an expert software engineering career navigator.\n' +
 'Perform a comprehensive skill gap analysis of the candidate resume against the target role.\n\n' +
 'Target Role: ' + jobLabel + '\n' +
@@ -727,7 +727,7 @@ async function callGeminiScan(resumeText, jobLabel, jdText) {
 '  "careerAdvice": "Focus on Docker and DSA to maximize interview readiness."\n' +
 '}';
 
-  return await callGeminiAPI(prompt, true);
+  return await callAIEngineAPI(prompt, true);
 }
 
 // UI Event Listeners for API Key Modal & AI Chatbot
@@ -741,13 +741,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (apiBadge && apiOverlay) {
     apiBadge.addEventListener('click', () => {
-      if (apiKeyInput) apiKeyInput.value = getGeminiKey();
+      if (apiKeyInput) apiKeyInput.value = getAIKey();
       apiOverlay.classList.add('open');
     });
     if (apiCancel) apiCancel.addEventListener('click', () => apiOverlay.classList.remove('open'));
     if (apiSave) {
       apiSave.addEventListener('click', () => {
-        setGeminiKey(apiKeyInput.value);
+        setAIKey(apiKeyInput.value);
         apiOverlay.classList.remove('open');
         const status = document.getElementById('apiKeyStatus');
         if (status) status.textContent = '⚡ API Key updated & saved';
@@ -807,13 +807,13 @@ async function handleChatSubmission() {
   // AI response loading bubble
   const aiDiv = document.createElement('div');
   aiDiv.className = 'chat-msg ai';
-  aiDiv.innerHTML = '<div class="msg-sender">Gemini AI Advisor</div><div class="msg-bubble">Thinking... ⚡</div>';
+  aiDiv.innerHTML = '<div class="msg-sender">GoalForge AI Advisor</div><div class="msg-bubble">Thinking... ⚡</div>';
   body.appendChild(aiDiv);
   body.scrollTop = body.scrollHeight;
   
   try {
     const profile = (await getJSON('profile')) || {};
-    const contextPrompt = 'You are GoalForge AI Advisor, a supportive career mentor powered by Gemini 2.5 Flash.\n' +
+    const contextPrompt = 'You are GoalForge AI Advisor, a supportive career mentor powered by GoalForge AI.\n' +
 'Candidate Info:\n' +
 'Name: ' + (profile.name || 'Candidate') + '\n' +
 'Goal: ' + (profile.goal || 'Tech placement') + '\n' +
@@ -821,7 +821,7 @@ async function handleChatSubmission() {
 'User Question: ' + msg + '\n\n' +
 'Provide a direct, clear, actionable, and encouraging career recommendation. Keep it within 2-3 concise paragraphs. Use bold formatting for key terms.';
 
-    const responseText = await callGeminiAPI(contextPrompt, false);
+    const responseText = await callAIEngineAPI(contextPrompt, false);
     const bubble = aiDiv.querySelector('.msg-bubble');
     if (bubble) bubble.innerHTML = formatMarkdownText(responseText);
   } catch (err) {
@@ -2943,7 +2943,7 @@ async function runScan(){
   runBtn.disabled = true;
   roadmapSection.style.display = 'none';
   
-  resultTag.textContent = 'scan.log — running Gemini 2.5 AI';
+  resultTag.textContent = 'scan.log — running GoalForge AI';
   termBody.innerHTML = '<div class="term-log" id="termLog"></div>';
   const log = document.getElementById('termLog');
 
@@ -2955,14 +2955,14 @@ async function runScan(){
   }
 
   addLogLine('dim', '›', `parsing resume against <b>${spec.label}</b>`);
-  addLogLine('ai', '◆', `Sending request to Google Gemini 2.5 Flash API...`);
+  addLogLine('ai', '◆', `Sending request to Google GoalForge AI Engine...`);
 
   const resumeText = resumeInput.value.trim();
   const jdText = jdMode === 'custom' ? document.getElementById('jdInput').value.trim() : '';
 
   try {
-    const aiResult = await callGeminiScan(resumeText, spec.label, jdText);
-    addLogLine('ok', '✓', `Connected to <b>Gemini 2.5 AI Engine</b>`);
+    const aiResult = await callAIScan(resumeText, spec.label, jdText);
+    addLogLine('ok', '✓', `Connected to <b>GoalForge AI Engine</b>`);
     
     if (aiResult.matchedSkills && aiResult.matchedSkills.length) {
       aiResult.matchedSkills.forEach(s => addLogLine('ok', '✓', `<b>${s}</b> matched by AI`));
@@ -3019,8 +3019,8 @@ async function runScan(){
     };
 
   } catch (err) {
-    console.warn('Gemini API scan failed, falling back to local engine:', err);
-    addLogLine('no', '✗', `Gemini API fallback to local rules: ${err.message}`);
+    console.warn('GoalForge AI scan failed, falling back to local engine:', err);
+    addLogLine('no', '✗', `GoalForge AI fallback to local rules: ${err.message}`);
     
     const {have, haveNames, insights} = detectSkills(resumeText);
     const gap = computeGap(spec.required, spec.nice, haveNames);
@@ -3079,7 +3079,7 @@ function finishScan(){
 
   const aiAdviceHTML = currentContext.aiAdvice ? `
     <div style="padding:16px 20px;background:rgba(177,140,255,0.08);border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:13px;color:var(--text-dim);line-height:1.6;">
-      <div style="font-family:var(--mono);font-size:11px;color:var(--violet);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">✨ Gemini 2.5 AI Executive Advice</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--violet);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">✨ GoalForge AI Executive Advice</div>
       ${currentContext.aiAdvice}
     </div>` : '';
 
@@ -3386,20 +3386,20 @@ async function enterTech(){
 })();
 </script>
 
-<!-- GEMINI API CONFIGURATION MODAL -->
+<!-- GOALFORGE AI CONFIGURATION MODAL -->
 <div class="modal-overlay" id="apiModalOverlay">
   <div class="modal" style="max-width:480px;">
     <div class="modal-head">
       <div class="eyebrow">api configuration</div>
-      <h3>Gemini 2.5 Flash API Settings</h3>
+      <h3>GoalForge AI Settings</h3>
     </div>
     <div class="modal-body">
       <div class="qgroup">
-        <div class="qlabel">Active Gemini API Key</div>
-        <div class="qsub">The AI Career Navigator uses Google Gemini 2.5 Flash to perform live resume gap analysis, personalized path diagnostics, and adaptive roadmap generation.</div>
-        <input type="text" id="apiKeyInput" style="font-family:var(--mono);font-size:12px;letter-spacing:0.04em;" placeholder="Enter Gemini API key...">
+        <div class="qlabel">Active GoalForge AI API Key</div>
+        <div class="qsub">The AI Career Navigator uses GoalForge AI Engine to perform live resume gap analysis, personalized path diagnostics, and adaptive roadmap generation.</div>
+        <input type="text" id="apiKeyInput" style="font-family:var(--mono);font-size:12px;letter-spacing:0.04em;" placeholder="Enter GoalForge AI API key...">
       </div>
-      <div id="apiKeyStatus" style="font-family:var(--mono);font-size:11.5px;margin-top:10px;color:var(--green);">⚡ API Key set and active (gemini-2.5-flash)</div>
+      <div id="apiKeyStatus" style="font-family:var(--mono);font-size:11.5px;margin-top:10px;color:var(--green);">⚡ API Key set and active (active-ai-model)</div>
     </div>
     <div class="modal-foot">
       <button class="modal-cancel" id="apiModalCancel">Close</button>
@@ -3415,13 +3415,13 @@ async function enterTech(){
 
 <div class="ai-chat-drawer" id="aiChatDrawer">
   <div class="chat-drawer-head">
-    <div class="chat-title"><span class="chat-dot"></span> <b>Gemini 2.5 AI Advisor</b></div>
+    <div class="chat-title"><span class="chat-dot"></span> <b>GoalForge AI Advisor</b></div>
     <button class="chat-close-btn" id="aiChatClose">✕</button>
   </div>
   <div class="chat-drawer-body" id="chatDrawerBody">
     <div class="chat-msg ai">
-      <div class="msg-sender">Gemini AI Advisor</div>
-      <div class="msg-bubble">Hi! I'm your Gemini-powered AI Career Advisor. Ask me anything about your resume, target role strategies, DSA priorities, or GATE/CAT exam prep!</div>
+      <div class="msg-sender">GoalForge AI Advisor</div>
+      <div class="msg-bubble">Hi! I'm your GoalForge AI Career Advisor. Ask me anything about your resume, target role strategies, DSA priorities, or GATE/CAT exam prep!</div>
     </div>
   </div>
   <div class="chat-quick-chips">
@@ -3430,7 +3430,7 @@ async function enterTech(){
     <span class="quick-chip" data-q="What system design fundamentals are expected for junior engineers?">System design intro</span>
   </div>
   <div class="chat-drawer-foot">
-    <input type="text" id="chatInput" placeholder="Ask Gemini AI career advice..." spellcheck="false">
+    <input type="text" id="chatInput" placeholder="Ask GoalForge AI career advice..." spellcheck="false">
     <button id="chatSendBtn">Send →</button>
   </div>
 </div>

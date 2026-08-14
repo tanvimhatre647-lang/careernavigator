@@ -1,9 +1,9 @@
 # GoalForge — AI Career Navigator 🚀
 
 > **Where do I go from here?**  
-> An AI-powered placement planner, skill gap scanner, path simulator, and adaptive roadmap generator — integrated with **Google Gemini 2.5 Flash API**.
+> An AI-powered placement planner, skill gap scanner, path simulator, and adaptive roadmap generator — integrated with **GoalForge AI Engine**.
 
-![AI Career Navigator](https://img.shields.io/badge/AI-Gemini%202.5%20Flash-b18cff?style=for-the-badge&logo=google)
+![AI Career Navigator](https://img.shields.io/badge/AI-GoalForge%20AI%20Engine-b18cff?style=for-the-badge&logo=openai)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 ![Built With](https://img.shields.io/badge/Built%20With-HTML5%20%7C%20Vanilla%20JS%20%7C%20CSS3-5eb1ff?style=for-the-badge)
 
@@ -11,13 +11,13 @@
 
 ## ✨ Features
 
-- 🤖 **Google Gemini 2.5 Flash API Integration**:
+- 🤖 **GoalForge AI Engine Integration**:
   - Live AI parsing of resumes against any target role or job description.
   - Contextual skill inference (detects unlisted implicit skills like REST APIs from full-stack project context).
   - AI-generated executive recommendations & prioritized skill acquisition order with estimated hours and prerequisites.
 
-- 💬 **Interactive AI Career Advisor Chatbot**:
-  - Floating `✨ AI Advisor` widget powered by Gemini 2.5 Flash.
+- 💬 **Interactive GoalForge AI Career Advisor Chatbot**:
+  - Floating `✨ AI Advisor` widget powered by GoalForge AI.
   - Ask real-time questions about interview strategies, DSA priorities, resume formatting, and GATE/CAT preparation.
 
 - 🧭 **Career Path Fit Diagnostic**:
@@ -56,20 +56,13 @@ Open `http://localhost:8080` in your browser.
 
 ---
 
-## ⚡ Gemini API Configuration
-
-The website comes with Gemini 2.5 Flash API support pre-integrated. 
-- You can inspect or update the API Key anytime by clicking the **`⚡ Gemini 2.5 AI`** pill badge in the top navigation bar.
-- API Key preferences are stored safely in `localStorage`.
-
----
-
 ## 📁 Repository Structure
 
 ```
 careernavigator/
-├── index.html                # Main application (HTML + CSS + Gemini JS Engine)
+├── index.html                # Main application (HTML + CSS + GoalForge AI Engine)
 ├── career-navigator.html     # Mirror entry point
+├── vercel.json               # Vercel deployment configuration
 ├── README.md                 # Project documentation
 └── .gitignore                # Git ignore rules
 ```
